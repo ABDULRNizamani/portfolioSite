@@ -1,0 +1,272 @@
+# Arniz Portfolio — Build Prompts
+
+
+Reference site for direction: **heynesh.com** — specifically its year-by-year "About Me" timeline and numbered project index. Don't copy its text or exact layout, just the two structural ideas: storytelling timeline, numbered project grid.
+
+**Confirmed from a screen recording (not guesswork) — use these specifics:**
+- Base palette is a warm cream/beige (~`#cfc8b6`), not white and not dark. One acid yellow-green accent (~`#fdff29`) is reused across sections (buttons, highlights) — pick one accent color and reuse it, don't introduce a second bright color.
+- At least one section breaks the palette entirely with a near-black full-bleed block (project showcase) — plan one deliberate high-contrast section, not a uniform-toned page throughout.
+- Scroll is smooth/eased throughout (Lenis-style), not native jumpy scroll.
+- The hero plays an entrance animation on page load, independent of scroll.
+- Clicking a nav link (e.g. "Home") triggers an animated smooth-scroll-to-anchor, not an instant jump — same eased motion as manual scrolling.
+- Scroll animations are **scrubbed and bidirectional**: elements (especially the connecting line/path between Journey timeline entries) animate forward on scroll down and visibly reverse/retract on scroll up. This is GSAP ScrollTrigger with `scrub` tied to scroll position — not a one-shot "fade in once, ignore scroll-up" animation. Build the Journey timeline with this in mind from the start. Make the retraction clearly visible when scrolling up — measured motion during this event was as large as anything else on the page, so this isn't a faint micro-animation, it should read as an obvious reverse-draw.
+
+Target name/keyword coverage for SEO: **Abdul Rehman Nizamani, Nizamani Abdul Rehman, Abdul Rehman, Nizamani, Tando Qaiser, Arniz**.
+
+---
+
+## Phase 0 — Setup
+
+```
+This is a portfolio site for a junior full-stack developer, built on the existing
+Vite + React 19 scaffold in this repo. Before writing any UI:
+
+1. Install and configure Tailwind CSS v4 (@tailwindcss/vite plugin).
+2. Install gsap and lenis (smooth scroll). Wire Lenis and GSAP ScrollTrigger
+   together properly — sync Lenis's scroll event to ScrollTrigger.update, and
+   drive Lenis's raf loop from gsap.ticker (not a separate requestAnimationFrame
+   loop). If they're not synced, scrub animations will visibly lag behind the
+   actual scroll position.
+3. Install react-icons.
+4. Strip the current App.jsx back to empty — remove the counter demo, remove
+   src/assets/react.svg and src/assets/vite.svg (unused).
+5. Replace public/favicon.svg with a simple "AR" monogram placeholder favicon for now
+   (I'll swap in a real one later).
+6. Set up this folder structure:
+   src/
+     components/sections/   (Hero, Journey, Projects, Skills, Contact)
+     components/ui/
+     data/content.js
+     assets/
+7. Load a distinct display font (self-hosted or Google Fonts — suggest a pairing:
+   one confident display sans for headings, a clean workhorse sans for body text)
+   and set it as the base font in Tailwind config.
+8. Confirm src/assets/hero.png — tell me its dimensions and whether it looks like
+   a usable headshot or a placeholder, before we build the hero around it.
+
+Don't build any section UI yet — this phase is just environment + folder structure.
+Show me the plan before running installs if anything is ambiguous.
+```
+
+---
+
+## Phase 1 — Content data layer
+
+```
+Create src/data/content.js exporting structured content for the site. Use exactly
+this information — don't invent facts, and leave placeholders in [BRACKETS] where
+noted:
+
+PERSON:
+- name: "Abdul Rehman Nizamani"
+- shortName / brand: "Arniz"
+- role: "Full-Stack Developer"
+- location: "Tando Qaiser, Sindh, Pakistan"
+- tagline: something like "Self-taught full-stack developer shipping real,
+  used products — now moving toward AI engineering." (write 2-3 alternatives,
+  I'll pick one)
+- status: "Open to junior developer roles & internships"
+- email: "[nizamaniabdulrehman49@example.com]"
+- links: github "[https://github.com/ABDULRNizamani]", linkedin "[https://www.linkedin.com/in/abdul-rehman-nizamani-6a5068351/]",
+  playstore "https://play.google.com/store/apps/details?id=com.abdulrehman.vidnotesai"
+
+JOURNEY (chronological timeline entries — year/stage, short headline, 2-3 sentence body):
+1. Primary education at a local school in Tando Qaiser.
+2. Moved to a nearby city for Matriculation (secondary) — achieved A+.
+3. Intermediate (higher secondary) — achieved A+. Currently applying to universities
+   for a Bachelor's program.
+4. First got into web dev after Matric: learned JS, HTML, CSS — then stepped away
+   from it for a while.
+5. Came back more seriously: learned React, built small but functional projects,
+   deployed them.
+6. Moved to Next.js: learned App Router, routing, SEO, caching. Earned the official
+   Vercel Next.js certification.
+7. Built StatisticallyUOS with a cousin (Shahzad Nizamani) — a full-stack academic
+   platform for University of Sindh students (CGPA leaderboards, subject stats,
+   anonymous teacher/subject reviews). Learned Supabase/Postgres here. Now used by
+   100+ active students.
+8. Got interested in backend engineering — learned Python fundamentals, moved to
+   FastAPI.
+9. Built WebWeave — an AI research assistant (Next.js + FastAPI + LangGraph),
+   deployed via Docker on a VPS. Learned LangChain/LangGraph and containerized
+   deployment here.
+10. Most recent: built VidNotes AI, a React Native (Expo) + FastAPI mobile app that
+    turns YouTube videos into study notes with quizzes/flashcards/AI tutor. Deployed
+    it to the Google Play Store — 10+ installs.
+11. Now: applying for junior developer / internship roles, with a longer-term goal
+    of shifting into AI engineering.
+
+PROJECTS (3 entries, each: name, one-line pitch, description paragraph, tech tags
+array, stats if any, links):
+
+1. StatisticallyUOS
+   - Pitch: Centralizes University of Sindh academic data into one clean platform.
+   - Tags: Next.js 16, TypeScript, React 19, Tailwind CSS, FastAPI, PostgreSQL, Supabase
+   - Stats: "100+ active students"
+   - Features to mention: CGPA leaderboard, all-time & batch-wise subject
+     leaderboards, subject overview with grade distribution, anonymous teacher
+     reviews, results lookup integration.
+   - Role: frontend + technical SEO (App Router metadata, JSON-LD, sitemap/robots,
+     Search Console). Backend/data API built by co-developer.
+
+2. WebWeave
+   - Pitch: Turns a plain-English query into a sourced, fact-checked research
+     briefing or report.
+   - Tags: Next.js, FastAPI, LangGraph, Groq (Llama 3.3 70B), Tavily, Docker,
+     DigitalOcean VPS
+   - Features to mention: multi-step pipeline (search → scrape → validate →
+     summarize → fact-check → format/report), query planning that classifies and
+     splits comparison queries, three separate Groq clients to manage rate limits,
+     briefing vs long-form report output modes.
+
+3. VidNotes AI
+   - Pitch: Turns YouTube videos into structured study notes, quizzes, flashcards,
+     and an AI tutor.
+   - Tags: React Native, Expo, FastAPI, Supabase, Gemini 2.5 Flash, Docker, Nginx
+   - Stats: "10+ installs on Google Play"
+   - Features to mention: parallel transcript chunking for long videos, three tutor
+     modes (Explain/Quiz/Socratic), Gemini-with-Groq-fallback, note lifecycle
+     scheduler, guest mode.
+   - Link: Play Store URL above.
+
+SKILLS (grouped): Languages, Frontend, Backend, Data & Infra, AI/LLM tooling —
+pull the specific tools from the project tags above, don't pad the list with
+things not actually used.
+
+Just build the data file. No UI yet.
+```
+
+---
+
+## Phase 2 — Hero + Journey timeline
+
+```
+Build two sections using src/data/content.js:
+
+1. Hero — full-viewport, name as a large display headline, tagline below,
+   status pill ("Open to junior roles & internships"), the hero.png photo,
+   and two CTAs: "View Projects" (scrolls to projects) and "Download Resume"
+   (link to /resume.pdf — file doesn't exist yet, just wire the href).
+   Include 2-3 small stat callouts (e.g. "3 shipped projects", "100+ users",
+   "10+ installs") similar to a stat-counter row. Give it a load-time entrance
+   animation (elements animating in on mount) independent of scroll — this
+   should play once when the page first loads, not repeat.
+
+2. Journey — a vertical scroll-driven timeline through the JOURNEY entries in
+   content.js. This is the section that carries the site's signature
+   interaction, build it carefully:
+   - An SVG path/line connects each timeline card in sequence, drawn using
+     stroke-dasharray/dashoffset (or a Motion Path), controlled by a GSAP
+     ScrollTrigger with `scrub: true` mapped to the section's scroll progress.
+   - Because scrub is tied directly to scroll position, this is naturally
+     bidirectional: scrolling down draws the line forward, scrolling up
+     retracts it — no extra logic needed for the reverse case, that's what
+     scrub gives you for free. Do NOT use toggleActions/one-shot triggers
+     for this line.
+   - Make the line's motion clearly visible, not a faint accent — it should
+     read as an obvious draw/retract, not subtle background decoration.
+   - Individual cards can have a lighter fade + y-translate reveal as they
+     enter (this part CAN be a simpler one-shot animation for performance),
+     alternating left/right on desktop, single column on mobile.
+
+Mobile-first: build the single-column mobile layout first, then add the
+desktop enhancements at md: breakpoints and above. Test at 375px width. On
+mobile, keep the scrub-linked line but simplify/shorten its path if needed
+for performance on low-end phones.
+```
+
+---
+
+## Phase 3 — Projects section
+
+```
+Build a "Selected Work" section: numbered list (01, 02, 03) of the three
+PROJECTS from content.js. Each entry: number, name, one-line pitch, tag chips
+for the tech stack, and a stats callout where present. Cards should feel like
+a numbered index, not generic bootstrap cards — take structural inspiration
+from a numbered project index but design your own visual treatment, don't
+copy any specific site's exact styling.
+
+Leave an image slot per project (I'll supply real screenshots later) — use a
+neutral placeholder (dark rounded rect with the project name) until then, not
+a broken image icon.
+
+Add scroll-linked reveal animation consistent with the Journey section's
+approach (lightweight one-shot fade/translate per card is fine here — the
+scrub/reverse treatment is specific to the Journey connector line, don't
+over-engineer this section to match it).
+Mobile: stack to single column, tags wrap.
+```
+
+---
+
+## Phase 4 — Skills, resume CTA, contact/footer
+
+```
+Build:
+1. A Skills section rendering the grouped skills from content.js as clean
+   category blocks (Languages / Frontend / Backend / Data & Infra / AI-LLM),
+   icons via react-icons where a matching icon exists.
+2. A "What I bring" mini-section (3-4 short value props for a hiring manager —
+   e.g. "ships end to end", "learns fast in public", "comfortable across the
+   stack" — write these to sound like a junior dev, not a freelance agency).
+3. Footer/contact: email displayed with a copy-to-clipboard button, GitHub/
+   LinkedIn/Play Store links, resume download link, small "© Abdul Rehman
+   Nizamani (Arniz)" line.
+
+Keep it mobile-responsive throughout — recheck all previous sections at
+375px, 768px, and 1280px widths before calling this phase done.
+```
+
+---
+
+## Phase 5 — SEO pass
+
+```
+Do a full SEO/meta pass. This is a client-rendered Vite SPA, so put everything
+crawlable directly in index.html (not injected only via JS):
+
+1. <title>: something like
+   "Abdul Rehman Nizamani (Arniz) — Full-Stack Developer | Next.js, FastAPI, React Native"
+2. Meta description mentioning name, role, and location naturally (not
+   keyword-stuffed).
+3. Open Graph + Twitter card tags, referencing an /og-image.png (1200x630 —
+   placeholder is fine for now, note that I need to generate/supply the real one).
+4. JSON-LD Person schema in index.html: name "Abdul Rehman Nizamani",
+   alternateName "Arniz", jobTitle "Full-Stack Developer",
+   address/homeLocation "Tando Qaiser, Sindh, Pakistan", sameAs array with
+   GitHub/LinkedIn/Play Store links, knowsAbout array with the core tech stack.
+5. Generate a minimal sitemap.xml and robots.txt in public/.
+6. Add meaningful alt text on the hero photo and project images (should
+   naturally include name/role, not stuffed).
+7. Flag for me: since this is a pure client-rendered SPA, crawlers that don't
+   execute JS will see an empty body. Tell me whether it's worth adding a
+   prerendering step (e.g. vite-plugin-prerender or a static prerender build)
+   before I treat SEO as "done."
+```
+
+---
+
+## Bonus prompt — Resume (run this whenever, in the same or a separate session)
+
+```
+Using the PERSON, JOURNEY, PROJECTS, and SKILLS data in src/data/content.js,
+generate a one-page resume for a junior full-stack developer role (no formal
+CS degree yet — still applying to university, so lead with shipped projects
+instead of education). Output both a .docx and a .pdf. Structure: header with
+contact placeholders, 2-3 line summary, Projects (treated like experience,
+with bullet achievements per project), Skills, Education (Matric A+,
+Intermediate A+, "applying to universities"), Certifications (Vercel Next.js
+cert). Keep it ATS-friendly: no tables/columns that break parsing, standard
+section headers, no graphics.
+```
+
+---
+
+## Things only you can do (no prompt fixes these)
+
+- Confirm/replace `hero.png` with a real, final-quality headshot.
+- Take or export actual screenshots of the three live projects (StatisticallyUOS, WebWeave, VidNotes AI) for the project cards.
+- Fill in the `[BRACKETED]` placeholders in Phase 1 (email, GitHub URL, LinkedIn URL) — the agent can't invent these.
+- Pick and buy a domain if you want one (`arniz.dev` / `abdulrehmannizamani.com` both work for the name-SEO goal — arniz.dev doubles as the short-name keyword).
+- After Phase 5, manually submit the sitemap to Google Search Console — no agent can do that step for you.
