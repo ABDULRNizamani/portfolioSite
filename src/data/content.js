@@ -1,7 +1,5 @@
 // Structured site content — Phase 1.
-// Exports: PERSON, JOURNEY, PROJECTS, SKILLS.
-// Bracketed values (e.g. "[https://...]") are unconfirmed placeholders —
-// swap them for the real links/email before shipping.
+// Exports: PERSON, JOURNEY, PROJECTS, VALUE_PROPS, SKILLS.
 
 export const PERSON = {
   name: "Abdul Rehman Nizamani",
@@ -15,11 +13,11 @@ export const PERSON = {
     "Full-stack developer, self-taught and product-obsessed — currently pushing into AI engineering.",
   ],
   status: "Open to junior developer roles & internships",
-  email: "[nizamaniabdulrehman49@example.com]",
+  email: "nizamaniabdulrehman49@gmail.com", // Swap if using a different primary email
   links: {
-    github: "[https://github.com/ABDULRNizamani]",
+    github: "https://github.com/ABDULRNizamani",
     linkedin:
-      "[https://www.linkedin.com/in/abdul-rehman-nizamani-6a5068351/]",
+      "https://www.linkedin.com/in/abdul-rehman-nizamani-6a5068351/",
     playstore:
       "https://play.google.com/store/apps/details?id=com.abdulrehman.vidnotesai",
   },
@@ -98,8 +96,11 @@ export const PROJECTS = [
   {
     id: "statisticallyuos",
     name: "StatisticallyUOS",
+    role: "Frontend & SEO Lead",
+    link: "https://www.statisticallyuos.tech/",
+    linkText: "Live Platform",
     pitch:
-      "Centralizes University of Sindh academic data into one clean platform.",
+      "A centralized academic analytics platform built for University of Sindh students, turning scattered campus data into actionable insights.",
     description:
       "A full-stack academic platform built for University of Sindh students, bringing CGPA leaderboards, subject-level statistics, and anonymous teacher/subject reviews together in one place. Built with a cousin, Shahzad Nizamani, and now used by 100+ active students.",
     tags: [
@@ -111,82 +112,83 @@ export const PROJECTS = [
       "PostgreSQL",
       "Supabase",
     ],
-    stats: ["100+ active students"],
+    stats: ["100+ Active Students", "0 Legacy Clutter"],
     features: [
-      "CGPA leaderboard",
-      "All-time & batch-wise subject leaderboards",
-      "Subject overview with grade distribution",
-      "Anonymous teacher reviews",
-      "Results lookup integration",
+      "CGPA & Subject Leaderboards: Filter rankings by department, batch, or surname with trophy badges for top performers.",
+      "Deep Subject Analytics: Historical grade distributions (A+ to F), fail severity metrics, and anonymous student reviews.",
+      "Integrated ITSC Lookup: Direct results portal bypass for instant student grade lookups without navigating the legacy university system.",
     ],
-    role: "Frontend + technical SEO (App Router metadata, JSON-LD, sitemap/robots, Search Console). Backend/data API built by co-developer.",
+    detailedRole:
+      "Frontend + technical SEO (App Router metadata, JSON-LD, sitemap/robots, Search Console). Backend/data API built by co-developer.",
     links: {
-      live: null,
-      github: null,
+      live: "https://www.statisticallyuos.tech/",
+      github: "https://github.com/ABDULRNizamani/SindhUni",
     },
-    image: null,
+    image: null, // Populated via project1Img inside your JSX
   },
   {
     id: "webweave",
     name: "WebWeave",
+    role: "Full-Stack Creator",
+    link: "https://web-weave-kappa.vercel.app/",
+    linkText: "Try WebWeave",
     pitch:
-      "Turns a plain-English query into a sourced, fact-checked research briefing or report.",
+      "An autonomous AI research assistant that transforms plain-English queries into sourced, fact-checked briefings and structured analytical reports.",
     description:
       "An AI research assistant that runs a multi-step pipeline over a user's query — searching, scraping, validating, summarizing, fact-checking, and formatting the result into a briefing or a longer report. Deployed via Docker on a DigitalOcean VPS.",
     tags: [
       "Next.js",
       "FastAPI",
       "LangGraph",
-      "Groq (Llama 3.3 70B)",
+      "Groq (Llama 3.3)",
       "Tavily",
       "Docker",
       "DigitalOcean VPS",
     ],
-    stats: [],
+    stats: ["LangGraph Engine", "0 Hallucinated Citations"],
     features: [
-      "Multi-step pipeline: search → scrape → validate → summarize → fact-check → format/report",
-      "Query planning that classifies and splits comparison queries",
-      "Three separate Groq clients to manage rate limits",
-      "Briefing vs long-form report output modes",
+      "Multi-Step Pipeline: Orchestrates web searching (Tavily), raw HTML scraping, filtration, and summarization using LangGraph.",
+      "Automated Fact-Checking: Llama-3.3-70B cross-references generated summaries against raw sources to eliminate hallucinations.",
+      "Dual Output Modes: Executive briefings with scored source cards (0–10) or long-form analytical reports with deep breakdowns.",
     ],
-    role: null,
+    detailedRole: null,
     links: {
-      live: null,
+      live: "https://web-weave-kappa.vercel.app/",
       github: null,
     },
-    image: null,
+    image: null, // Populated via project2Img inside your JSX
   },
   {
     id: "vidnotes-ai",
     name: "VidNotes AI",
+    role: "Mobile & Backend Developer",
+    link: "https://play.google.com/store/apps/details?id=com.abdulrehman.vidnotesai",
+    linkText: "Play Store",
     pitch:
-      "Turns YouTube videos into structured study notes, quizzes, flashcards, and an AI tutor.",
+      "A mobile study suite that converts hour-long YouTube lectures, documentaries, and playlists into structured study notes, quizzes, and flashcards.",
     description:
       "A React Native (Expo) + FastAPI mobile app that converts YouTube videos into study material — notes, quizzes, flashcards — plus an AI tutor to ask follow-up questions. Deployed to the Google Play Store.",
     tags: [
-      "React Native",
-      "Expo",
+      "React Native (Expo)",
       "FastAPI",
-      "Supabase",
       "Gemini 2.5 Flash",
-      "Docker",
-      "Nginx",
+      "Groq",
+      "Supabase (Postgres)",
+      "NativeWind",
     ],
-    stats: ["10+ installs on Google Play"],
+    stats: ["Live on Play Store", "Socratic AI Tutor"],
     features: [
-      "Parallel transcript chunking for long videos",
-      "Three tutor modes: Explain / Quiz / Socratic",
-      "Gemini-with-Groq-fallback",
-      "Note lifecycle scheduler",
-      "Guest mode",
+      "Parallel Video Chunking: Generates clean, hierarchical notes (Subjects → Topics → Notes) from YouTube videos or entire playlists using Gemini 2.5 Flash.",
+      "Active Recall Suite: Automatically generates multiple-choice quizzes with mistake tracking, flashcards, and daily review questions.",
+      "Socratic AI Tutor: An intelligent chatbot with 3 learning modes (Explain, Quiz, Socratic) grounded strictly in your generated notes.",
     ],
-    role: null,
+    detailedRole: null,
     links: {
       live: null,
       github: null,
       playStore: PERSON.links.playstore,
     },
-    image: null,
+    image: null, // Populated via project3Img inside your JSX
   },
 ]
 

@@ -35,19 +35,43 @@ const BADGES = [
   { label: "Detail-Oriented", icon: FaMagnifyingGlass },
 ]
 
+// Terms to display inside the moving blue strip
+const STRIP_TERMS = [
+  "FULL-STACK DEVELOPER",
+  "•",
+  "AI ENGINEERING",
+  "•",
+  "REACT & GSAP",
+  "•",
+  "PROBLEM SOLVER",
+  "•",
+  "PRODUCT BUILDER",
+  "•",
+]
+
 function Hero() {
   const rootRef = useRef(null)
 
-  // Entrance animation
+  // Entrance & Marquee animation
   useEffect(() => {
     const ctx = gsap.context(() => {
       // Ensure absolute center positioning is locked via GSAP transforms
       gsap.set("[data-hero-photo]", { xPercent: -50 })
 
+      // 1. Infinite Horizontal Ticker for the Blue Strip
+      gsap.to("[data-marquee-track]", {
+        xPercent: -50,
+        repeat: -1,
+        duration: 20,
+        ease: "none",
+      })
+
+      // 2. Entrance Timeline
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } })
 
       tl.from("[data-hero-name]", { opacity: 0, y: -30, duration: 1 })
         .from("[data-hero-nav]", { y: -10, opacity: 0, duration: 0.6 }, "-=0.6")
+        .from("[data-hero-strip]", { scaleX: 0, opacity: 0, duration: 0.8 }, "-=0.4")
         .from("[data-hero-photo]", { y: 80, opacity: 0, duration: 1 }, "-=0.8")
         .from("[data-hero-headline]", { y: 30, opacity: 0, duration: 0.7 }, "-=0.6")
         .from("[data-hero-badge]", { x: 30, opacity: 0, duration: 0.5, stagger: 0.08 }, "-=0.5")
@@ -115,7 +139,25 @@ function Hero() {
         </ul>
       </nav>
 
-      {/* 3. Hero Portrait (Centered via left-1/2 and GSAP xPercent: -50) */}
+      {/* 3. Angled Blue Marquee Strip (Layer z-[5] -> Behind Photo, Above Wordmark) */}
+      <div
+        data-hero-strip
+        className="pointer-events-none absolute top-[48%] left-[-10%] z-[5] flex w-[120%] -rotate-3 overflow-hidden bg-[#0044ff] py-3 text-white shadow-2xl border-y-2 border-[#e2ff00]"
+      >
+        <div
+          data-marquee-track
+          className="flex w-max items-center whitespace-nowrap font-black tracking-widest text-sm md:text-lg uppercase"
+        >
+          {/* Render duplicated lists to create an endless loop */}
+          {[...STRIP_TERMS, ...STRIP_TERMS, ...STRIP_TERMS, ...STRIP_TERMS].map((term, idx) => (
+            <span key={idx} className="mx-4 text-[#e2ff00] last:text-white">
+              {term}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* 4. Hero Portrait (Centered via left-1/2 and GSAP xPercent: -50) */}
       <div
         data-hero-photo
         className="absolute bottom-0 left-1/2 z-10 pointer-events-none"
@@ -127,7 +169,7 @@ function Hero() {
         />
       </div>
 
-      {/* 4. Left Stat Cards (Glassmorphism overlay) */}
+      {/* 5. Left Stat Cards (Glassmorphism overlay) */}
       <div className="absolute left-[5%] bottom-[22%] z-20 hidden sm:flex flex-col gap-4 md:left-[8%]">
         <div
           data-hero-stat
@@ -156,7 +198,7 @@ function Hero() {
         </div>
       </div>
 
-      {/* 5. Center Headline Overlay (Made smaller & moved down) */}
+      {/* 6. Center Headline Overlay */}
       <div
         data-hero-headline
         className="pointer-events-none absolute left-1/2 bottom-[10%] z-20 w-full -translate-x-1/2 text-center"
@@ -169,7 +211,7 @@ function Hero() {
           By Doing.
         </h2>
 
-        {/* 6. CTAs right under headline */}
+        {/* 7. CTAs right under headline */}
         <div className="pointer-events-auto mt-4 flex items-center justify-center gap-3">
           <a
             data-hero-cta
@@ -190,7 +232,7 @@ function Hero() {
         </div>
       </div>
 
-      {/* 7. Right Badge Panel (Glassmorphism vertical list) */}
+      {/* 8. Right Badge Panel (Glassmorphism vertical list) */}
       <div className="absolute right-[5%] bottom-[25%] z-20 hidden sm:flex flex-col gap-2 rounded-2xl bg-white/15 p-3 border border-white/20 backdrop-blur-md shadow-xl lg:right-[8%]">
         {BADGES.map(({ label, icon: Icon }) => (
           <div
@@ -206,7 +248,7 @@ function Hero() {
         ))}
       </div>
 
-      {/* 8. Bottom-Left Tagline */}
+      {/* 9. Bottom-Left Tagline */}
       <div
         data-hero-tagline
         className="absolute left-[5%] bottom-[4%] z-20 hidden text-xs font-semibold text-black/70 sm:block md:left-[8%]"
@@ -215,7 +257,7 @@ function Hero() {
         <p>That's {PERSON.shortName}.</p>
       </div>
 
-      {/* 9. Bottom-Right Blurb */}
+      {/* 10. Bottom-Right Blurb */}
       <p
         data-hero-blurb
         className="absolute right-[5%] bottom-[4%] z-20 hidden max-w-[280px] text-right text-xs font-medium leading-tight text-black/70 sm:block md:right-[8%]"
