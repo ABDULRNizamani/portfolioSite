@@ -1,5 +1,25 @@
-// Structured site content — Phase 1.
-// Exports: PERSON, JOURNEY, PROJECTS, VALUE_PROPS, SKILLS.
+// Structured site content
+// Exports: PERSON, JOURNEY, PROJECTS, VALUE_PROPS, SKILLS, SKILL_ICONS.
+
+import {
+  SiJavascript,
+  SiTypescript,
+  SiPython,
+  SiHtml5,
+  SiCss,
+  SiReact,
+  SiNextdotjs,
+  SiTailwindcss,
+  SiExpo,
+  SiFastapi,
+  SiPostgresql,
+  SiSupabase,
+  SiDocker,
+  SiDigitalocean,
+  SiNginx,
+  SiLangchain,
+  SiGooglegemini,
+} from "react-icons/si"
 
 export const PERSON = {
   name: "Abdul Rehman Nizamani",
@@ -192,9 +212,6 @@ export const PROJECTS = [
   },
 ]
 
-// Phase 4 — short value props for the "What I bring" mini-section.
-// Written to read like a junior dev being straight about what they've
-// actually done, not agency copy.
 export const VALUE_PROPS = [
   {
     title: "Ships end to end",
@@ -239,4 +256,26 @@ export const SKILLS = {
     "Tavily",
     "Gemini 2.5 Flash",
   ],
+}
+
+export const SKILL_ICONS = {
+  JavaScript: SiJavascript,
+  TypeScript: SiTypescript,
+  Python: SiPython,
+  HTML: SiHtml5,
+  CSS: SiCss,
+  "React 19": SiReact,
+  "Next.js 16": SiNextdotjs,
+  "Next.js App Router": SiNextdotjs,
+  "Tailwind CSS": SiTailwindcss,
+  "React Native": SiReact,
+  Expo: SiExpo,
+  FastAPI: SiFastapi,
+  PostgreSQL: SiPostgresql,
+  Supabase: SiSupabase,
+  Docker: SiDocker,
+  "DigitalOcean VPS": SiDigitalocean,
+  Nginx: SiNginx,
+  LangChain: SiLangchain,
+  "Gemini 2.5 Flash": SiGooglegemini,
 }

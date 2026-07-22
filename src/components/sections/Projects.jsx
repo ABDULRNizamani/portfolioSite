@@ -2,7 +2,6 @@ import { useEffect, useRef } from "react"
 import { gsap } from "../../lib/gsap"
 import { PROJECTS } from "../../data/content"
 
-// Import project screenshots in order from the assets folder
 import project1Img from "../../assets/project1.png"
 import project2Img from "../../assets/project2.png"
 import project3Img from "../../assets/project3.png"
@@ -19,7 +18,6 @@ function ProjectImage({ src, name }) {
       />
     )
   }
-
   return (
     <div className="flex h-full w-full flex-col items-center justify-center gap-2 bg-[#1a1a1a] p-6 text-center">
       <span className="font-display text-base font-semibold text-[#cfc8b6]/70 sm:text-lg">
@@ -48,9 +46,11 @@ function Projects() {
     const ctx = gsap.context(() => {
       const track = trackRef.current
       const cards = cardsRef.current
+      const sectionWidth = sectionRef.current.offsetWidth
 
-      // 1. Create the main horizontal scroll tween
-      const getScrollAmount = () => -(track.scrollWidth - window.innerWidth)
+      // Fixed: Use section container width instead of window.innerWidth 
+      // so it properly accounts for the 280px sidebar layout
+      const getScrollAmount = () => -(track.scrollWidth - sectionWidth)
       
       const scrollTween = gsap.to(track, {
         x: getScrollAmount,
@@ -60,7 +60,7 @@ function Projects() {
           start: "top top",
           end: () => `+=${track.scrollWidth}`,
           pin: true,
-          scrub: 1, // Lenis smoothing
+          scrub: 1,
           snap: {
             snapTo: 1 / (PROJECTS.length - 1),
             duration: { min: 0.2, max: 0.6 },
@@ -70,10 +70,8 @@ function Projects() {
         },
       })
 
-      // 2. Maximum Prominence 3D Effect
       cards.forEach((card) => {
         const wrapper = card.parentElement
-
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: wrapper,
@@ -84,9 +82,6 @@ function Projects() {
           },
         })
 
-        // Extreme parameters: 
-        // 75deg rotation, 30% scale, full opacity fade, and sharper power3 easing
-        // This makes it feel like it's swinging in from very far away
         tl.fromTo(
           card,
           { scale: 0.3, opacity: 0, rotateY: -75 },
@@ -107,7 +102,6 @@ function Projects() {
       id="projects"
       className="relative flex h-screen w-full flex-col justify-center overflow-hidden bg-[#0f0f0f] text-[#cfc8b6]"
     >
-      {/* Fixed Header Overlay */}
       <div className="absolute left-0 top-8 z-20 w-full pointer-events-none px-6 md:px-12 lg:top-12 lg:px-20">
         <h2 className="font-display text-2xl font-bold sm:text-3xl md:text-4xl pointer-events-auto w-max">
           Selected Work
@@ -117,11 +111,7 @@ function Projects() {
         </p>
       </div>
 
-      {/* Horizontal Carousel Track */}
-      <div
-        ref={trackRef}
-        className="flex h-full w-max items-center pt-20"
-      >
+      <div ref={trackRef} className="flex h-full w-max items-center pt-20">
         {PROJECTS.map((project, index) => {
           const imageSrc = PROJECT_IMAGES[index] || project.image
           const ImageWrapper = project.link ? "a" : "div"
@@ -129,15 +119,15 @@ function Projects() {
           return (
             <div
               key={project.id}
-              className="flex w-screen shrink-0 items-center justify-center px-6 md:px-12 lg:px-20"
-              // Dropping perspective to 800px highly exaggerates the 3D focal distortion
+              // Fixed: Replaced w-screen with w-[calc(100vw-280px)] to prevent the wrapper
+              // from causing layout overflow since the sidebar takes up 280px.
+              className="flex w-[calc(100vw-280px)] shrink-0 items-center justify-center px-6 md:px-12 lg:px-20"
               style={{ perspective: "800px" }}
             >
               <div
                 ref={registerCard}
                 className="flex h-[78vh] min-h-[500px] max-h-[800px] w-full max-w-5xl flex-col rounded-3xl border border-white/10 bg-[#1a1a1a]/90 p-5 shadow-2xl backdrop-blur-md md:p-8"
               >
-                {/* Top Section: Text Content */}
                 <div className="flex shrink-0 flex-col items-start text-left">
                   <div className="flex w-full flex-wrap items-center justify-between gap-2">
                     <div className="flex items-baseline gap-2.5">
@@ -191,7 +181,6 @@ function Projects() {
                   </div>
                 </div>
 
-                {/* Bottom Section: Clickable Large Image */}
                 <ImageWrapper
                   href={project.link}
                   target={project.link ? "_blank" : undefined}
@@ -201,8 +190,6 @@ function Projects() {
                   }`}
                 >
                   <ProjectImage src={imageSrc} name={project.name} />
-
-                  {/* Hover Overlay Indicator */}
                   {project.link && (
                     <div className="absolute inset-0 z-10 flex items-center justify-center bg-[#0f0f0f]/30 opacity-0 backdrop-blur-[2px] transition-all duration-300 group-hover:opacity-100">
                       <span className="translate-y-4 rounded-full bg-[#fdff29] px-6 py-3 font-display text-sm font-bold tracking-wide text-[#0f0f0f] shadow-xl transition-transform duration-300 group-hover:translate-y-0">
